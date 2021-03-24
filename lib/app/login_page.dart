@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsapp/model/usuario.dart';
+import 'package:whatsapp/model/Usuario.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerSenha = TextEditingController();
-  
+
   String _mensagemErro = "";
 
   _validarCapos() async {
@@ -24,11 +24,11 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         Usuario usuario = Usuario();
-        
+
         usuario.email = email;
         usuario.senha = senha;
 
-       _logarUsuario(usuario);
+        _logarUsuario(usuario);
       } else {
         setState(() {
           _mensagemErro = "Preencha a senha.";
@@ -44,12 +44,12 @@ class _LoginPageState extends State<LoginPage> {
   _logarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    auth.signInWithEmailAndPassword(
-            email: usuario.email, 
-            password: usuario.senha)
+    auth
+        .signInWithEmailAndPassword(
+            email: usuario.email, password: usuario.senha)
         .then((firebsaeUser) {
-      
-      Navigator.popAndPushNamed(context, '/home'); //Passar o context para não abrir tela preta
+      Navigator.popAndPushNamed(
+          context, '/home'); //Passar o context para não abrir tela preta
     }).catchError((onError) {
       setState(() {
         _mensagemErro = 'Erro ao autenticar usuário.';
@@ -152,7 +152,8 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               _mensagemErro = "";
                             });
-                            Navigator.of(context).pushReplacementNamed('/cadastro');
+                            Navigator.of(context)
+                                .pushReplacementNamed('/cadastro');
                           },
                         ),
                       ),

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/model/Abaconversas_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:whatsapp/model/Usuario.dart';
 
 class Conversas extends StatefulWidget {
   @override
@@ -44,6 +45,13 @@ class _ConversasState extends State<Conversas> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _controller.stream,
@@ -57,7 +65,7 @@ class _ConversasState extends State<Conversas> {
           case ConnectionState.active:
           case ConnectionState.done:
             if (snapshot.hasError) {
-              Text("Erro ao carregar dados!");
+              return Text("Erro ao carregar dados!");
             } else {
               QuerySnapshot querySnapshot = snapshot.data;
 
@@ -79,10 +87,20 @@ class _ConversasState extends State<Conversas> {
                     String tipo = item["tipoMensagem"];
                     String mensagem = item["mensagem"];
                     String nome = item["nome"];
+                    String idDestinatario = item["idDestinatario"];
+
+                    Usuario usuario = Usuario();
+                    usuario.nome = nome;
+                    usuario.urlImagem = urlImagem;
+                    usuario.idUsuario = idDestinatario;
 
                     return Column(
                       children: [
                         ListTile(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/mensagens",
+                                arguments: usuario);
+                          },
                           contentPadding: EdgeInsets.fromLTRB(10, 1, 16, 1),
                           leading: CircleAvatar(
                             maxRadius: 32,
@@ -108,6 +126,7 @@ class _ConversasState extends State<Conversas> {
                     );
                   });
             }
+            break;
         }
       },
     );
